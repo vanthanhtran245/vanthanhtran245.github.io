@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Dynamic Framework vs Static Framework trong iOS - Cách hoạt động và so sánh chi tiết
+title: Dynamic Framework vs Static Framework trong iOS
 date: 2026-01-03 00:00:00 +0700
 description: Tìm hiểu sự khác biệt giữa Dynamic Framework và Static Framework trong iOS, cách chúng được load vào app, ưu nhược điểm và khi nào nên dùng loại nào.
 img: framework_comparison.png
@@ -255,5 +255,3 @@ Hiểu rõ cơ chế hoạt động của cả hai loại sẽ giúp bạn đưa
 - [dyld source code](https://opensource.apple.com/source/dyld/)
 
 ---
-
-**Made with ❤️ for the iOS community**
