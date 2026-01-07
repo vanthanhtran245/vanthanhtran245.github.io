@@ -1,34 +1,34 @@
 ---
 layout: post
-title: Dynamic Framework vs Static Framework trong iOS
+title: Dynamic Framework vs Static Framework in iOS
 date: 2026-01-03 00:00:00 +0700
-description: Tìm hiểu sự khác biệt giữa Dynamic Framework và Static Framework trong iOS, cách chúng được load vào app, ưu nhược điểm và khi nào nên dùng loại nào.
+description: Understand the differences between Dynamic Framework and Static Framework in iOS, how they are loaded into the app, their pros and cons, and when to use each.
 img: framework_comparison.png
 fig-caption: Dynamic vs Static Framework
 tags: [ios, framework, swift, xcode]
 ---
 
-Khi phát triển ứng dụng iOS, việc hiểu rõ sự khác biệt giữa **Dynamic Framework** và **Static Framework** là điều cực kỳ quan trọng. Bài viết này sẽ giúp bạn hiểu sâu về cách chúng hoạt động, cơ chế load vào app, và khi nào nên sử dụng loại nào.
+When developing iOS applications, understanding the differences between **Dynamic Framework** and **Static Framework** is extremely important. This article will help you deeply understand how they work, their loading mechanisms, and when to use each type.
 
-## 📚 Khái niệm cơ bản
+## 📚 Basic Concepts
 
 ### Static Library/Framework
 
-**Static Library** (`.a` file) hoặc **Static Framework** là một tập hợp các object files được đóng gói lại. Khi bạn build app, **tất cả code từ static library sẽ được copy trực tiếp vào binary của app**.
+**Static Library** (`.a` file) or **Static Framework** is a collection of object files bundled together. When you build the app, **all code from the static library is copied directly into the app binary**.
 
 ### Dynamic Framework
 
-**Dynamic Framework** (`.framework` hoặc `.dylib`) là một bundle chứa compiled code, resources, và headers. Code **không được copy vào app binary** mà được **link và load tại runtime**.
+**Dynamic Framework** (`.framework` or `.dylib`) is a bundle containing compiled code, resources, and headers. The code is **not copied into the app binary** but is **linked and loaded at runtime**.
 
 ---
 
-## 🔧 Cơ chế Load vào App
+## 🔧 Loading Mechanism into App
 
 ### Static Framework - Link Time Loading
 
 ![Static Framework Loading Mechanism]({{site.baseurl}}/assets/img/static_framework_diagram.png)
 
-Với Static Framework, quá trình diễn ra như sau:
+With Static Framework, the process works as follows:
 
 ```
 ┌─────────────────┐     ┌──────────────┐     ┌─────────────────────┐
@@ -40,16 +40,16 @@ Với Static Framework, quá trình diễn ra như sau:
         └──────────────────────────────────────────────┘
 ```
 
-**Quá trình:**
-1. **Compile Time**: Compiler biên dịch source code thành object files (`.o`)
-2. **Link Time**: Linker (`ld`) lấy tất cả object files từ static library và **copy trực tiếp** vào app binary
-3. **Runtime**: App chạy với tất cả code đã được nhúng sẵn - không cần load thêm gì
+**Process:**
+1. **Compile Time**: Compiler compiles source code into object files (`.o`)
+2. **Link Time**: Linker (`ld`) takes all object files from the static library and **copies them directly** into the app binary
+3. **Runtime**: App runs with all code already embedded - no additional loading required
 
 ### Dynamic Framework - Runtime Loading
 
 ![Dynamic Framework Loading Mechanism]({{site.baseurl}}/assets/img/dynamic_framework_diagram.png)
 
-Với Dynamic Framework, quá trình phức tạp hơn:
+With Dynamic Framework, the process is more complex:
 
 ```
 ┌─────────────────┐     ┌──────────────┐     ┌─────────────────────┐
@@ -63,20 +63,20 @@ Với Dynamic Framework, quá trình phức tạp hơn:
                     └───────────────────┘
 ```
 
-**Quá trình:**
-1. **Compile Time**: Framework được compile riêng biệt
-2. **Link Time**: Linker chỉ ghi lại **reference** đến framework (không copy code)
-3. **Runtime**: Khi app khởi động, `dyld` (dynamic linker) sẽ:
-   - Đọc các dependency từ Mach-O header
-   - Tìm framework trong `@rpath` (thường là `Frameworks/` trong app bundle)
-   - Load framework vào memory
-   - Resolve symbols và thực hiện binding
+**Process:**
+1. **Compile Time**: Framework is compiled separately
+2. **Link Time**: Linker only records a **reference** to the framework (no code copied)
+3. **Runtime**: When app launches, `dyld` (dynamic linker) will:
+   - Read dependencies from Mach-O header
+   - Find framework in `@rpath` (usually `Frameworks/` in app bundle)
+   - Load framework into memory
+   - Resolve symbols and perform binding
 
 ---
 
-## 🔄 So sánh chi tiết: dyld Process
+## 🔄 Detailed Comparison: dyld Process
 
-### Launch Time với Dynamic Framework
+### Launch Time with Dynamic Framework
 
 ```
 App Launch
@@ -98,7 +98,7 @@ App Launch
 └─────────────────────────────────────────┘
 ```
 
-### Launch Time với Static Framework
+### Launch Time with Static Framework
 
 ```
 App Launch
@@ -115,67 +115,67 @@ App Launch
 
 ---
 
-## ⚖️ Ưu và Nhược điểm
+## ⚖️ Pros and Cons
 
 ### Static Framework
 
-| ✅ Ưu điểm | ❌ Nhược điểm |
-|-----------|--------------|
-| **Khởi động nhanh hơn** - Không cần load từ disk tại runtime | **App size lớn hơn** - Code được duplicate nếu nhiều target dùng chung |
-| **Dễ distribute** - Chỉ cần 1 file binary | **Không thể share giữa apps** - Mỗi app có bản copy riêng |
-| **Không có vấn đề về dyld** - Tránh được crash do missing framework | **Build time lâu hơn** - Linker phải copy và link tất cả code |
-| **Dead code stripping** - Linker có thể loại bỏ code không dùng | **Update khó** - Phải rebuild toàn bộ app để update library |
-| **Bảo mật hơn** - Khó extract ra framework riêng | **Xung đột symbols** - Có thể conflict nếu 2 static libs dùng chung dependency |
+| ✅ Pros | ❌ Cons |
+|---------|---------|
+| **Faster startup** - No need to load from disk at runtime | **Larger app size** - Code is duplicated if multiple targets share it |
+| **Easy to distribute** - Only need 1 binary file | **Cannot share between apps** - Each app has its own copy |
+| **No dyld issues** - Avoid crashes due to missing framework | **Longer build time** - Linker must copy and link all code |
+| **Dead code stripping** - Linker can remove unused code | **Difficult to update** - Must rebuild entire app to update library |
+| **More secure** - Harder to extract the framework separately | **Symbol conflicts** - Can conflict if 2 static libs share a dependency |
 
 ### Dynamic Framework
 
-| ✅ Ưu điểm | ❌ Nhược điểm |
-|-----------|--------------|
-| **App size nhỏ hơn** - Có thể share giữa app và extensions | **Khởi động chậm hơn** - dyld cần thời gian để load |
-| **Hot-swappable** - Có thể update framework mà không rebuild app | **Phức tạp hơn** - Cần quản lý đúng `@rpath` và embedding |
-| **Memory efficient** - Framework được share trong memory | **Crash potential** - Missing framework = crash ngay lập tức |
-| **App Extensions** - Bắt buộc dùng dynamic cho sharing code | **Code signature** - Mỗi framework cần sign riêng |
-| **Faster incremental builds** - Chỉ rebuild framework thay đổi | **Không có dead code stripping** - Toàn bộ framework được include |
+| ✅ Pros | ❌ Cons |
+|---------|---------|
+| **Smaller app size** - Can share between app and extensions | **Slower startup** - dyld needs time to load |
+| **Hot-swappable** - Can update framework without rebuilding app | **More complex** - Need to manage `@rpath` and embedding correctly |
+| **Memory efficient** - Framework is shared in memory | **Crash potential** - Missing framework = immediate crash |
+| **App Extensions** - Required for sharing code | **Code signature** - Each framework needs separate signing |
+| **Faster incremental builds** - Only rebuild changed framework | **No dead code stripping** - Entire framework is included |
 
 ---
 
-## 📊 Khi nào nên dùng loại nào?
+## 📊 When to Use Each Type?
 
-### Sử dụng Static Framework khi:
+### Use Static Framework when:
 
 ```swift
-// ✅ Third-party libraries nhỏ
-// ✅ Core utilities được dùng mọi nơi
-// ✅ Không có App Extensions
-// ✅ Ưu tiên launch time
+// ✅ Small third-party libraries
+// ✅ Core utilities used everywhere
+// ✅ No App Extensions
+// ✅ Prioritize launch time
 // ✅ Distributing closed-source SDK
 ```
 
-- Thư viện nhỏ, được dùng ở khắp nơi trong app
-- Bạn muốn tối ưu launch time
-- Không cần share code với App Extensions
-- Distributing SDK cho third-party (dễ integrate hơn)
+- Small libraries used throughout the app
+- You want to optimize launch time
+- No need to share code with App Extensions
+- Distributing SDK for third-party (easier to integrate)
 
-### Sử dụng Dynamic Framework khi:
+### Use Dynamic Framework when:
 
 ```swift
-// ✅ Sharing code với App Extensions
+// ✅ Sharing code with App Extensions
 // ✅ Large frameworks (SwiftUI, Combine, etc.)
 // ✅ Modular architecture
-// ✅ Hot-patching cần thiết
+// ✅ Hot-patching needed
 // ✅ Reducing app bundle size
 ```
 
-- Bạn có App Extensions (Share, Today, Watch, etc.)
-- Cần modular architecture với nhiều targets
-- Thư viện lớn không cần load ngay khi app start
-- Team lớn, cần build độc lập các modules
+- You have App Extensions (Share, Today, Watch, etc.)
+- Need modular architecture with multiple targets
+- Large libraries not needed at app startup
+- Large team, need independent module builds
 
 ---
 
-## 🛠 Cấu hình trong Xcode
+## 🛠 Configuration in Xcode
 
-### Tạo Static Framework
+### Create Static Framework
 
 ```ruby
 # Podspec
@@ -185,10 +185,10 @@ Pod::Spec.new do |s|
 end
 ```
 
-Hoặc trong Xcode:
+Or in Xcode:
 1. Build Settings → **Mach-O Type** → `Static Library`
 
-### Tạo Dynamic Framework
+### Create Dynamic Framework
 
 ```ruby
 # Podspec
@@ -198,58 +198,58 @@ Pod::Spec.new do |s|
 end
 ```
 
-Trong Xcode:
+In Xcode:
 1. Build Settings → **Mach-O Type** → `Dynamic Library`
 2. General → **Frameworks, Libraries** → Embed & Sign
 
 ---
 
-## 🔍 Kiểm tra loại Framework
+## 🔍 Check Framework Type
 
-Bạn có thể kiểm tra một framework là static hay dynamic bằng command:
+You can check if a framework is static or dynamic using this command:
 
 ```bash
-# Kiểm tra Mach-O type
+# Check Mach-O type
 $ file MyFramework.framework/MyFramework
 MyFramework.framework/MyFramework: Mach-O universal binary with 2 architectures
 
-# Chi tiết hơn
+# More details
 $ otool -l MyFramework.framework/MyFramework | grep -A 2 LC_ID
 
-# Nếu thấy LC_ID_DYLIB → Dynamic
-# Nếu không thấy → Static
+# If you see LC_ID_DYLIB → Dynamic
+# If not → Static
 ```
 
 ---
 
 ## 💡 Best Practices
 
-1. **Prefer Static cho SPM packages** - Swift Package Manager mặc định link static, đây là lựa chọn tốt cho hầu hết trường hợp
+1. **Prefer Static for SPM packages** - Swift Package Manager defaults to static linking, which is a good choice for most cases
 
-2. **Dùng Dynamic cho App Extensions** - Nếu app có extensions, sử dụng dynamic framework để share code và giảm size
+2. **Use Dynamic for App Extensions** - If app has extensions, use dynamic framework to share code and reduce size
 
-3. **Avoid embedding dynamic frameworks** nếu không cần thiết - Mỗi dynamic framework thêm ~100-500ms vào launch time
+3. **Avoid embedding dynamic frameworks** if not necessary - Each dynamic framework adds ~100-500ms to launch time
 
-4. **Merge static libraries** - Nếu có nhiều static libs, consider merge chúng để giảm link time
+4. **Merge static libraries** - If you have many static libs, consider merging them to reduce link time
 
-5. **Use `@_implementationOnly`** - Khi expose API, dùng annotation này để hide internal dependencies
-
----
-
-## 🎯 Kết luận
-
-Việc chọn giữa Static và Dynamic Framework phụ thuộc vào:
-
-- **App architecture**: Có extensions không?
-- **Team size**: Cần build độc lập không?
-- **Performance priority**: Launch time hay app size?
-- **Distribution method**: SDK cho third-party hay internal use?
-
-Hiểu rõ cơ chế hoạt động của cả hai loại sẽ giúp bạn đưa ra quyết định đúng đắn cho dự án của mình.
+5. **Use `@_implementationOnly`** - When exposing API, use this annotation to hide internal dependencies
 
 ---
 
-**Tham khảo thêm:**
+## 🎯 Conclusion
+
+Choosing between Static and Dynamic Framework depends on:
+
+- **App architecture**: Do you have extensions?
+- **Team size**: Need independent builds?
+- **Performance priority**: Launch time or app size?
+- **Distribution method**: SDK for third-party or internal use?
+
+Understanding how both types work will help you make the right decision for your project.
+
+---
+
+**References:**
 - [Apple Documentation - Dynamic Library Programming Topics](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/DynamicLibraries/)
 - [WWDC 2016 - Optimizing App Startup Time](https://developer.apple.com/videos/play/wwdc2016/406/)
 - [dyld source code](https://opensource.apple.com/source/dyld/)

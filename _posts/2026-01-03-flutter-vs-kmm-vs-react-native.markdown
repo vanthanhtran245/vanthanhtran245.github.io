@@ -2,33 +2,33 @@
 layout: post
 title: Flutter vs KMM vs React Native - Mobile Cross-Platform 2026
 date: 2026-01-03 20:00:00 +0700
-description: So sánh chi tiết Flutter, Kotlin Multiplatform Mobile (KMM) và React Native về hiệu năng, chi phí phát triển, khả năng maintain và cộng đồng hỗ trợ.
+description: A detailed comparison of Flutter, Kotlin Multiplatform Mobile (KMM), and React Native in terms of performance, development cost, maintainability, and community support.
 img: crossplatform_comparison.png
 fig-caption: Flutter vs KMM vs React Native
 tags: [flutter, kmm, react-native, cross-platform, mobile]
 ---
 
-Khi xây dựng ứng dụng mobile đa nền tảng, việc chọn đúng framework là quyết định quan trọng ảnh hưởng đến toàn bộ vòng đời dự án. Bài viết này sẽ so sánh chi tiết **Flutter**, **Kotlin Multiplatform Mobile (KMM)**, và **React Native** qua 4 tiêu chí quan trọng: **Performance**, **Chi phí**, **Maintainability**, và **Community**.
+When building cross-platform mobile applications, choosing the right framework is a critical decision that affects the entire project lifecycle. This article will compare **Flutter**, **Kotlin Multiplatform Mobile (KMM)**, and **React Native** in detail across 4 important criteria: **Performance**, **Cost**, **Maintainability**, and **Community**.
 
 ---
 
-## 📊 Tổng quan nhanh
+## 📊 Quick Overview
 
-| Tiêu chí | Flutter | KMM | React Native |
+| Criteria | Flutter | KMM | React Native |
 |----------|---------|-----|--------------|
-| **Ngôn ngữ** | Dart | Kotlin | JavaScript/TypeScript |
-| **Công ty** | Google | JetBrains | Meta (Facebook) |
-| **Ra mắt** | 2017 | 2020 | 2015 |
+| **Language** | Dart | Kotlin | JavaScript/TypeScript |
+| **Company** | Google | JetBrains | Meta (Facebook) |
+| **Released** | 2017 | 2020 | 2015 |
 | **Rendering** | Custom (Skia/Impeller) | Native UI | Native UI via Bridge |
 | **Code sharing** | UI + Logic (95-100%) | Logic only (50-70%) | UI + Logic (80-90%) |
 
 ---
 
-## 🚀 Performance - Hiệu năng
+## 🚀 Performance
 
 ### Flutter - ⭐⭐⭐⭐⭐ (Excellent)
 
-Flutter sử dụng **engine rendering riêng** (Skia, và Impeller cho iOS) để vẽ trực tiếp lên canvas, không phụ thuộc vào native UI components.
+Flutter uses its **own rendering engine** (Skia, and Impeller for iOS) to draw directly on the canvas, without depending on native UI components.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -42,19 +42,19 @@ Flutter sử dụng **engine rendering riêng** (Skia, và Impeller cho iOS) đ�
 └─────────────────────────────────────────────────────┘
 ```
 
-**Ưu điểm Performance:**
-- **60-120 FPS** consistent vì không có bridge overhead
-- **AOT compilation** - Dart compiled thành native ARM code
-- **Predictable performance** - không bị ảnh hưởng bởi native UI changes
-- **Impeller engine** (iOS) giảm jank và shader compilation stutter
+**Performance Pros:**
+- **60-120 FPS** consistent because there's no bridge overhead
+- **AOT compilation** - Dart compiled to native ARM code
+- **Predictable performance** - not affected by native UI changes
+- **Impeller engine** (iOS) reduces jank and shader compilation stutter
 
-**Nhược điểm:**
-- App size lớn hơn (~5-10MB overhead cho engine)
-- Memory footprint cao hơn
+**Cons:**
+- Larger app size (~5-10MB overhead for the engine)
+- Higher memory footprint
 
 ### KMM - ⭐⭐⭐⭐⭐ (Native Performance)
 
-KMM cho phép **chia sẻ business logic** trong khi UI vẫn là **100% native**.
+KMM allows **sharing business logic** while the UI remains **100% native**.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -69,19 +69,19 @@ KMM cho phép **chia sẻ business logic** trong khi UI vẫn là **100% native*
 └─────────────────────────────────────────────────────┘
 ```
 
-**Ưu điểm Performance:**
-- **Native performance thực sự** - UI là native, không có abstraction layer
-- **Kotlin/Native** compile thành native binary cho iOS
-- **Zero bridge overhead** cho UI interactions
-- **Platform-specific optimizations** có thể áp dụng dễ dàng
+**Performance Pros:**
+- **True native performance** - UI is native, no abstraction layer
+- **Kotlin/Native** compiles to native binary for iOS
+- **Zero bridge overhead** for UI interactions
+- **Platform-specific optimizations** can be easily applied
 
-**Nhược điểm:**
-- Kotlin/Native garbage collector có thể gây pause ngắn trên iOS
-- Interop với Swift có overhead nhỏ
+**Cons:**
+- Kotlin/Native garbage collector may cause brief pauses on iOS
+- Interop with Swift has minor overhead
 
 ### React Native - ⭐⭐⭐ (Good, with caveats)
 
-React Native sử dụng **JavaScript bridge** để giao tiếp với native modules. Phiên bản mới (0.70+) có **New Architecture** với JSI và Fabric.
+React Native uses a **JavaScript bridge** to communicate with native modules. The new version (0.70+) has **New Architecture** with JSI and Fabric.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -98,15 +98,15 @@ React Native sử dụng **JavaScript bridge** để giao tiếp với native mo
 └─────────────────────────────────────────────────────┘
 ```
 
-**Ưu điểm Performance (New Architecture):**
-- **JSI** - synchronous calls, không còn JSON serialization
-- **Hermes engine** - optimized JavaScript engine cho mobile
-- **Fabric** - concurrent rendering tương tự React 18
+**Performance Pros (New Architecture):**
+- **JSI** - synchronous calls, no more JSON serialization
+- **Hermes engine** - optimized JavaScript engine for mobile
+- **Fabric** - concurrent rendering similar to React 18
 
-**Nhược điểm:**
-- Vẫn có overhead so với native thuần
-- Complex animations có thể bị jank nếu không optimize đúng
-- Heavy lifting cần viết native modules
+**Cons:**
+- Still has overhead compared to pure native
+- Complex animations may jank if not properly optimized
+- Heavy lifting requires writing native modules
 
 ### 📈 Performance Benchmark (Real-world)
 
@@ -120,15 +120,15 @@ React Native sử dụng **JavaScript bridge** để giao tiếp với native mo
 
 ---
 
-## 💰 Chi phí phát triển
+## 💰 Development Cost
 
 ### Flutter - ⭐⭐⭐⭐⭐ (Cost Effective)
 
-**Ưu điểm chi phí:**
+**Cost Pros:**
 - **1 codebase = 2 platforms** (iOS + Android) + Web, Desktop
-- **Hot reload** giảm development time 30-40%
-- **Không cần iOS + Android developers riêng**
-- **Widget library phong phú** - ít cần custom UI
+- **Hot reload** reduces development time by 30-40%
+- **No need for separate iOS + Android developers**
+- **Rich widget library** - less need for custom UI
 
 ```
 Development Cost Comparison (hypothetical app):
@@ -146,16 +146,16 @@ Flutter:
 Savings: ~25-35%
 ```
 
-**Chi phí ẩn:**
-- Training cost nếu team chưa biết Dart
-- Platform-specific features vẫn cần native code
+**Hidden costs:**
+- Training cost if team doesn't know Dart
+- Platform-specific features still require native code
 
 ### KMM - ⭐⭐⭐ (Moderate)
 
-**Ưu điểm chi phí:**
-- **Leverage existing Android team** - Kotlin là ngôn ngữ chính của Android
-- **Gradual adoption** - có thể adopt từng phần, không cần rewrite
-- **Shared business logic** giảm duplicate code 50-70%
+**Cost Pros:**
+- **Leverage existing Android team** - Kotlin is Android's primary language
+- **Gradual adoption** - can adopt incrementally, no need to rewrite
+- **Shared business logic** reduces duplicate code by 50-70%
 
 ```
 Development Cost (KMM approach):
@@ -169,20 +169,20 @@ Platform-specific:
 ├── Android Developer (also KMM): $80k/year (shared)
 └── Total: $140-160k/year
 
-Savings: ~10-20% (mainly từ shared logic)
+Savings: ~10-20% (mainly from shared logic)
 ```
 
-**Chi phí ẩn:**
-- Vẫn cần **iOS developer** cho UI
+**Hidden costs:**
+- Still need an **iOS developer** for UI
 - **Swift/Kotlin interop** learning curve
-- **Tooling** chưa mature bằng Flutter/RN
+- **Tooling** not as mature as Flutter/RN
 
 ### React Native - ⭐⭐⭐⭐ (Good)
 
-**Ưu điểm chi phí:**
-- **Huge JavaScript talent pool** - dễ tìm developers
-- **Web developers có thể chuyển sang** nhanh
-- **Code sharing với React web** (nếu có)
+**Cost Pros:**
+- **Huge JavaScript talent pool** - easy to find developers
+- **Web developers can transition** quickly
+- **Code sharing with React web** (if applicable)
 
 ```
 Development Cost (React Native):
@@ -194,12 +194,12 @@ Total: $95-105k/year
 Savings: ~35-40%
 ```
 
-**Chi phí ẩn:**
-- **Native bridges** cho features phức tạp
-- **Dependency hell** - ecosystem fragmentary
-- **Breaking changes** giữa các versions
+**Hidden costs:**
+- **Native bridges** for complex features
+- **Dependency hell** - fragmented ecosystem
+- **Breaking changes** between versions
 
-### 💵 Tổng kết chi phí
+### 💵 Cost Summary
 
 | Factor | Flutter | KMM | React Native |
 |--------|---------|-----|--------------|
@@ -210,23 +210,23 @@ Savings: ~35-40%
 
 ---
 
-## 🛠 Maintainability - Khả năng bảo trì
+## 🛠 Maintainability
 
 ### Flutter - ⭐⭐⭐⭐ (Good)
 
-**Điểm mạnh:**
-- **Strong typing** với Dart - catch bugs early
-- **Official packages** được maintain tốt (google_fonts, go_router, etc.)
-- **Consistent API** - ít breaking changes
-- **DevTools** mạnh mẽ cho debugging và profiling
+**Strengths:**
+- **Strong typing** with Dart - catch bugs early
+- **Official packages** are well maintained (google_fonts, go_router, etc.)
+- **Consistent API** - few breaking changes
+- **DevTools** are powerful for debugging and profiling
 
-**Điểm yếu:**
-- **Widget tree phức tạp** - có thể khó đọc với nested widgets
-- **State management** nhiều options (Provider, Riverpod, Bloc, GetX) - confusion
-- **Platform updates** - phải đợi Flutter team support new iOS/Android features
+**Weaknesses:**
+- **Complex widget tree** - can be hard to read with nested widgets
+- **State management** has many options (Provider, Riverpod, Bloc, GetX) - can cause confusion
+- **Platform updates** - must wait for Flutter team to support new iOS/Android features
 
 ```dart
-// Flutter: Widget nesting có thể trở nên phức tạp
+// Flutter: Widget nesting can become complex
 Scaffold(
   body: SafeArea(
     child: Padding(
@@ -243,16 +243,16 @@ Scaffold(
 
 ### KMM - ⭐⭐⭐⭐⭐ (Excellent)
 
-**Điểm mạnh:**
-- **Native UI** - theo platform guidelines tự nhiên, tự động support new features
+**Strengths:**
+- **Native UI** - follows platform guidelines naturally, automatically supports new features
 - **Kotlin** - modern, safe, expressive language
-- **Gradual migration** - có thể maintain hybrid codebase
+- **Gradual migration** - can maintain hybrid codebase
 - **Strong IDE support** - IntelliJ/Android Studio excellent
 
-**Điểm yếu:**
-- **2 UI codebases** vẫn cần maintain (Swift + Kotlin)
-- **iOS tooling** cho Kotlin/Native chưa perfect
-- **Debugging** shared code trên iOS có thể tricky
+**Weaknesses:**
+- **2 UI codebases** still need maintenance (Swift + Kotlin)
+- **iOS tooling** for Kotlin/Native not perfect yet
+- **Debugging** shared code on iOS can be tricky
 
 ```kotlin
 // KMM: Clean separation of concerns
@@ -267,24 +267,24 @@ class UserRepository(
     }
 }
 
-// Platform-specific UI - iOS và Android riêng biệt
+// Platform-specific UI - iOS and Android separate
 ```
 
 ### React Native - ⭐⭐⭐ (Challenging)
 
-**Điểm mạnh:**
-- **Fast iteration** với Hot Reload
-- **Familiar** cho web developers
+**Strengths:**
+- **Fast iteration** with Hot Reload
+- **Familiar** for web developers
 - **Rich ecosystem** (though fragmented)
 
-**Điểm yếu:**
+**Weaknesses:**
 - **JavaScript** - runtime errors, type issues (TypeScript helps)
 - **Dependency hell** - package compatibility issues
-- **Breaking changes** giữa major versions
+- **Breaking changes** between major versions
 - **Native modules** require platform knowledge
 
 ```typescript
-// React Native: Dependencies có thể conflict
+// React Native: Dependencies can conflict
 // package.json nightmare
 {
   "dependencies": {
@@ -343,7 +343,7 @@ Community Growth (2020-2026):
 - **JetBrains backing** - creator of Kotlin
 - **Ktor** - official networking library
 - **SQLDelight** - type-safe SQL
-- **Growing ecosystem** nhưng nhỏ hơn Flutter/RN
+- **Growing ecosystem** but smaller than Flutter/RN
 
 ```
 Community Status:
@@ -366,7 +366,7 @@ Solid foundation, room to grow
 - **Huge JavaScript community**
 - **Expo** - simplified development workflow
 - **Meta backing** - though reduced focus
-- **Third-party libraries** cho mọi thứ (quality varies)
+- **Third-party libraries** for everything (quality varies)
 
 ```
 Ecosystem Reality:
@@ -389,31 +389,31 @@ Maintenance:  ████████ Varies
 
 ---
 
-## 🎯 Khi nào nên dùng framework nào?
+## 🎯 When to Use Each Framework?
 
-### Chọn Flutter khi:
+### Choose Flutter when:
 
-✅ Cần **UI đẹp, custom** và consistent across platforms  
-✅ **Startup/MVP** cần ship nhanh  
-✅ Team size nhỏ, muốn **1 codebase**  
-✅ Target **nhiều platforms** (mobile + web + desktop)  
-✅ **Không cần** deep native integrations  
+✅ You need **beautiful, custom UI** that's consistent across platforms  
+✅ **Startup/MVP** that needs to ship quickly  
+✅ Small team size, want **1 codebase**  
+✅ Targeting **multiple platforms** (mobile + web + desktop)  
+✅ **Don't need** deep native integrations  
 
-### Chọn KMM khi:
+### Choose KMM when:
 
-✅ Đã có **Android team mạnh** với Kotlin expertise  
-✅ App cần **native UI/UX** theo platform guidelines  
-✅ **Gradual migration** từ existing native apps  
+✅ You already have a **strong Android team** with Kotlin expertise  
+✅ App needs **native UI/UX** following platform guidelines  
+✅ **Gradual migration** from existing native apps  
 ✅ **Performance critical** app (games, media)  
-✅ Cần **deep platform integrations**  
+✅ Need **deep platform integrations**  
 
-### Chọn React Native khi:
+### Choose React Native when:
 
-✅ Team có **strong JavaScript/React background**  
-✅ Đang có **React web app** muốn share code  
-✅ Cần **fast prototyping** với Expo  
-✅ **Large talent pool** là priority  
-✅ App **không quá complex** về native features  
+✅ Team has **strong JavaScript/React background**  
+✅ Already have a **React web app** and want to share code  
+✅ Need **fast prototyping** with Expo  
+✅ **Large talent pool** is a priority  
+✅ App is **not too complex** in terms of native features  
 
 ---
 
@@ -436,7 +436,7 @@ Maintenance:  ████████ Varies
 
 ---
 
-**Tham khảo thêm:**
+**References:**
 - [Flutter Documentation](https://flutter.dev/)
 - [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 - [React Native](https://reactnative.dev/)
